@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPT-QoL Dashboard — 汎用技術×生活の質</title>
+<style>
+:root { --red: #CC1400; --dark: #1a1a1a; --gray: #666; --light: #f5f5f5; --white: #fff; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Sans JP', 'Helvetica Neue', sans-serif; background: var(--white); color: var(--dark); line-height: 1.6; }
+.header { background: var(--dark); color: var(--white); padding: 2rem 3rem; }
+.header h1 { font-size: 1.6rem; font-weight: 300; letter-spacing: 0.1em; }
+.header .subtitle { color: #999; font-size: 0.85rem; margin-top: 0.3rem; }
+.stats-bar { display: flex; gap: 2rem; padding: 1.5rem 3rem; background: var(--light); border-bottom: 1px solid #ddd; flex-wrap: wrap; }
+.stat { text-align: center; }
+.stat .number { font-size: 2rem; font-weight: 700; color: var(--red); }
+.stat .label { font-size: 0.75rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; }
+.content { max-width: 1400px; margin: 0 auto; padding: 2rem 3rem; }
+.section { margin-bottom: 3rem; }
+.section h2 { font-size: 1.1rem; font-weight: 600; color: var(--dark); border-bottom: 2px solid var(--red); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+.card { background: var(--white); border: 1px solid #e0e0e0; padding: 1.5rem; border-radius: 4px; }
+.card h3 { font-size: 0.9rem; color: var(--gray); margin-bottom: 1rem; }
+.quadrant-chart { width: 100%; aspect-ratio: 1; position: relative; background: #fafafa; border: 1px solid #ddd; }
+.quadrant-chart .axis-x { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #ccc; }
+.quadrant-chart .axis-y { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #ccc; }
+.quadrant-chart .label { position: absolute; font-size: 0.7rem; color: #999; }
+.quadrant-chart .q { position: absolute; font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.5rem; border-radius: 3px; }
+.quadrant-chart .q1 { top: 15%; right: 15%; background: rgba(0,150,0,0.1); color: #060; }
+.quadrant-chart .q2 { top: 15%; left: 15%; background: rgba(0,0,200,0.15); color: #006; }
+.quadrant-chart .q3 { bottom: 15%; left: 15%; background: rgba(200,0,0,0.1); color: #600; }
+.quadrant-chart .q4 { bottom: 15%; right: 15%; background: rgba(200,150,0,0.1); color: #630; }
+.bar { display: flex; align-items: center; margin-bottom: 0.5rem; }
+.bar .bar-label { width: 120px; font-size: 0.8rem; color: var(--gray); }
+.bar .bar-fill { height: 20px; background: var(--red); border-radius: 2px; transition: width 0.3s; }
+.bar .bar-value { margin-left: 0.5rem; font-size: 0.8rem; font-weight: 600; }
+.dim-chart { display: flex; gap: 0.3rem; align-items: flex-end; height: 120px; }
+.dim-bar { flex: 1; background: var(--red); border-radius: 2px 2px 0 0; position: relative; min-width: 30px; }
+.dim-bar .dim-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: var(--gray); white-space: nowrap; }
+.dim-bar .dim-value { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; font-weight: 600; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th { text-align: left; padding: 0.5rem; border-bottom: 2px solid var(--dark); font-weight: 600; }
+td { padding: 0.5rem; border-bottom: 1px solid #eee; }
+tr:hover { background: #f9f9f9; }
+.tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 2px; font-size: 0.7rem; font-weight: 600; }
+.tag-i { background: #e8f5e9; color: #2e7d32; }
+.tag-ii { background: #e3f2fd; color: #1565c0; }
+.tag-iii { background: #fce4ec; color: #c62828; }
+.tag-iv { background: #fff3e0; color: #e65100; }
+.footer { background: var(--dark); color: #999; padding: 1.5rem 3rem; font-size: 0.75rem; text-align: center; margin-top: 3rem; }
+#loading { text-align: center; padding: 3rem; color: var(--gray); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>GPT-QoL Dashboard</h1>
+  <div class="subtitle">汎用技術が生活の質に与えるインパクトの系譜 — General Purpose Technology Impact on Quality of Life</div>
+</div>
+
+<div class="stats-bar" id="stats-bar"></div>
+
+<div class="content">
+  <div class="section">
+    <h2>2軸4象限フレームワーク</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>象限分布</h3>
+        <div class="quadrant-chart">
+          <div class="axis-x"></div>
+          <div class="axis-y"></div>
+          <div class="label" style="top:5%;left:50%;transform:translateX(-50%)">生活の質が高まる</div>
+          <div class="label" style="bottom:5%;left:50%;transform:translateX(-50%)">生活の質が高まらない</div>
+          <div class="label" style="left:5%;top:50%;transform:translateY(-50%) rotate(-90deg)">経済に寄与しない</div>
+          <div class="label" style="right:5%;top:50%;transform:translateY(-50%) rotate(90deg)">経済に寄与する</div>
+          <div class="q q1" id="q1-count"></div>
+          <div class="q q2" id="q2-count"></div>
+          <div class="q q3" id="q3-count"></div>
+          <div class="q q4" id="q4-count"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>GPT別事象数</h3>
+        <div id="gpt-bars"></div>
+        <h3 style="margin-top:2rem">ドメイン分布（上位10）</h3>
+        <div id="domain-bars"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>6次元QoLスコアリング（GPT別平均）</h2>
+    <div class="grid-3" id="dim-charts"></div>
+  </div>
+
+  <div class="section">
+    <h2>象限II: 経済に寄与しないが生活の質を高めるルート（サンプル）</h2>
+    <div class="card">
+      <table id="q2-table">
+        <thead><tr><th>事象</th><th>GPT</th><th>年代</th><th>地域</th><th>QoL</th><th>採用パス</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>採用パスタイプ分布</h2>
+    <div class="card">
+      <div id="path-bars"></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  GPT-QoL Project — Foresight Tools Suite<br>
+  Data: SQLite 3-database architecture | 6-dimension QoL scoring model | 2-axis 4-quadrant framework
+</div>
+
+<script>
+// Load data from embedded JSON (generated at build time)
+const DATA = {"total": 32217, "by_gpt": [["Automobile", 27605], ["Electricity", 1400], ["Steam Engine", 1215], ["Telephone", 1006], ["Printing Press", 991]], "quadrants": [["I", 20294], ["II", 11569], ["III", 178], ["IV", 176]], "domains": [["other", 13304], ["commerce", 3054], ["urban", 2438], ["leisure", 2176], ["culture", 1760], ["artistic", 1667], ["social", 1206], ["labor", 1197], ["healthcare", 1165], ["political", 1065], ["communication", 723], ["transportation", 702], ["scientific", 631], ["domestic", 325], ["education", 231], ["military", 230], ["spiritual", 212], ["rural", 131]], "adoption_paths": 25, "relations": 90, "dim_scores": [["Automobile", {"aesthetic": 1.89, "emotional": 2.15, "meaning": 2.62, "relational": 2.06, "autonomy": 2.58, "cultural": 2.1}], ["Electricity", {"aesthetic": 2.22, "emotional": 2.46, "meaning": 2.63, "relational": 2.45, "autonomy": 2.42, "cultural": 2.33}], ["Steam Engine", {"aesthetic": 1.16, "emotional": 1.38, "meaning": 2.26, "relational": 1.5, "autonomy": 2.05, "cultural": 1.49}], ["Telephone", {"aesthetic": 1.07, "emotional": 1.51, "meaning": 2.24, "relational": 2.13, "autonomy": 1.97, "cultural": 1.96}], ["Printing Press", {"aesthetic": 1.38, "emotional": 2.01, "meaning": 2.54, "relational": 2.11, "autonomy": 2.46, "cultural": 1.98}]], "q2_samples": [{"name": "Underground Press Movement", "name_ja": "アンダーグラウンドプレス運動", "gpt": "Printing Press", "ys": 1966, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 5, "sau": 5, "sc": 4, "path": "resistance", "desc": "Underground Press Syndicate grew from 15 (1966) to 271 papers (1971). Offset lithography enabled $300-400 startup. Experimental layouts, excluded themes. Parallel information ecosystem during Vietnam era"}, {"name": "Rental Vehicle Insurance Coverage Complexity", "name_ja": "レンタカー保険", "gpt": "Automobile", "ys": 1990, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Rental contracts offer multiple insurance options (liability, collision, theft); consumer confusion"}, {"name": "Damage Dispute Arbitration Industry Growth", "name_ja": "破損紛争仲裁", "gpt": "Automobile", "ys": 1985, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Rental companies face legal liability for damage assessments; arbitration services and disputes proliferate"}, {"name": "Cross-Border Rental Car Requirements", "name_ja": "国境越えレンタル", "gpt": "Automobile", "ys": 1990, "region": "Europe", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Multi-country rentals require green card insurance and IDP permits; document complexity"}, {"name": "Skills Test Elimination Reciprocal States", "name_ja": "免許相互承認", "gpt": "Automobile", "ys": 1980, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Some states reciprocally recognize other states' licenses without re-testing; portability"}, {"name": "Handicapped Accessible Plate Misuse", "name_ja": "障害者用プレート悪用", "gpt": "Automobile", "ys": 2000, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Non-disabled individuals abuse disabled parking tags; enforcement and fraud difficult"}, {"name": "License Plate Collector Hobby Culture", "name_ja": "プレートコレクター文化", "gpt": "Automobile", "ys": 1950, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "License plate collecting becomes niche hobby; rare plates command high prices"}, {"name": "Plate Design Heritage and History", "name_ja": "プレートデザイン史", "gpt": "Automobile", "ys": 1900, "region": "Global", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Plate designs evolve with state symbols, colors, fonts reflecting regional identity and history"}, {"name": "Vintage Plate Restoration Collector Market", "name_ja": "ビンテージプレート市場", "gpt": "Automobile", "ys": 1980, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Restored antique license plates become collectible art; auction prices rise; museum exhibitions"}, {"name": "E10 Ethanol Blend Compatibility Issues", "name_ja": "E10適合問題", "gpt": "Automobile", "ys": 2005, "region": "Global", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Higher ethanol blends cause seal/tank corrosion in older vehicles; compatibility warnings issued"}, {"name": "Hydrogen Fuel Cell Car Infrastructure Sparse", "name_ja": "水素燃料電池", "gpt": "Automobile", "ys": 2000, "region": "Japan", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Toyota Mirai and Hyundai Nexo hydrogen cars lack fueling infrastructure; chicken-egg problem"}, {"name": "Fuel Grade Selection Knob Premium Confusion", "name_ja": "ガソリン選択ノブ混乱", "gpt": "Automobile", "ys": 1975, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Consumers confused between regular/mid/premium octane at pump; unclear labeling"}, {"name": "Flex Fuel E85 Ethanol Vehicle Program", "name_ja": "E85フレックス燃料", "gpt": "Automobile", "ys": 1995, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Ford/GM promote flex-fuel vehicles running 85% ethanol; agricultural subsidy justification"}, {"name": "Carbon Tax Fuel Price Policy Debate", "name_ja": "炭素税燃料", "gpt": "Automobile", "ys": 2005, "region": "Global", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Some countries propose carbon tax on fuel; industry opposition; implementation varies"}, {"name": "Gasoline Pump Display Antiquated Technology", "name_ja": "ポンプ表示器時代遅れ", "gpt": "Automobile", "ys": 1990, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Old pump displays lack digital screens; slow price updates; user experience poor"}, {"name": "Gas Station Bathroom Key Chained Reduction", "name_ja": "トイレ鍵制度廃止", "gpt": "Automobile", "ys": 1990, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Major chains transition from locked bathrooms to customer access; safety/cleanliness trade-off"}, {"name": "Ethanol Fuel Pipeline Incompatibility", "name_ja": "エタノール配管不適合", "gpt": "Automobile", "ys": 2005, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Ethanol corrodes existing fuel pipelines; new segregated pipelines required; cost burden"}, {"name": "Fuel Pump Corner Replacement Trend", "name_ja": "給油ポンプ角配置", "gpt": "Automobile", "ys": 1950, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Fuel pump placement moves from front to rear corner for safety and design flexibility"}, {"name": "Parking Garage Spiral Ramp Aesthetics", "name_ja": "スパイラルランプ美学", "gpt": "Automobile", "ys": 1950, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Iconic spiral parking garage ramps become architectural feature; parking as design element"}, {"name": "Parking Enforcement Officer Quota Pressure", "name_ja": "駐車違反取締ノルマ", "gpt": "Automobile", "ys": 1990, "region": "USA", "sa": 5, "se": 5, "sm": 5, "sr": 4, "sau": 5, "sc": 5, "path": "serendipitous", "desc": "Officers pressed to meet ticket quotas; equity and fairness concerns in low-income areas"}], "path_types": [["serendipitous", 29324], ["linear", 2500], ["grassroots", 249], ["resistance", 87], ["appropriation", 36], ["repurposed", 14], ["hybridization", 7]]};
+
+function init() {
+  if (!DATA) {
+    document.getElementById('loading')?.remove();
+    return;
+  }
+
+  // Stats bar
+  const statsBar = document.getElementById('stats-bar');
+  const stats = [
+    { number: DATA.total.toLocaleString(), label: '総事象数' },
+    { number: DATA.by_gpt.length, label: 'GPT数' },
+    { number: DATA.quadrants.find(q => q[0]==='II')?.[1]?.toLocaleString() || '0', label: '象限II事象' },
+    { number: DATA.adoption_paths, label: '採用パス' },
+    { number: DATA.relations, label: '事象間関係' },
+  ];
+  statsBar.innerHTML = stats.map(s => `<div class="stat"><div class="number">${s.number}</div><div class="label">${s.label}</div></div>`).join('');
+
+  // Quadrant counts
+  DATA.quadrants.forEach(([q, c]) => {
+    const el = document.getElementById(`q${q.toLowerCase()}-count`);
+    if (el) el.textContent = `${q}: ${c.toLocaleString()}`;
+  });
+
+  // GPT bars
+  const maxGpt = Math.max(...DATA.by_gpt.map(g => g[1]));
+  document.getElementById('gpt-bars').innerHTML = DATA.by_gpt.map(([name, count]) =>
+    `<div class="bar"><div class="bar-label">${name}</div><div class="bar-fill" style="width:${100*count/maxGpt}%"></div><div class="bar-value">${count.toLocaleString()}</div></div>`
+  ).join('');
+
+  // Domain bars
+  const maxDom = Math.max(...DATA.domains.slice(0,10).map(d => d[1]));
+  document.getElementById('domain-bars').innerHTML = DATA.domains.slice(0,10).map(([name, count]) =>
+    `<div class="bar"><div class="bar-label">${name}</div><div class="bar-fill" style="width:${100*count/maxDom}%;opacity:0.7"></div><div class="bar-value">${count.toLocaleString()}</div></div>`
+  ).join('');
+
+  // Dimension charts per GPT
+  const dimCharts = document.getElementById('dim-charts');
+  const dims = ['aesthetic','emotional','meaning','relational','autonomy','cultural'];
+  const dimLabels = ['美的','感情','意味','関係','自律','文化'];
+  dimCharts.innerHTML = DATA.dim_scores.map(([gpt, scores]) => {
+    const maxS = 5;
+    return `<div class="card"><h3>${gpt}</h3><div class="dim-chart">${dims.map((d, i) => {
+      const v = scores[d] || 0;
+      const h = Math.max(5, Math.abs(v) / maxS * 100);
+      const color = v >= 0 ? 'var(--red)' : '#666';
+      return `<div class="dim-bar" style="height:${h}%;background:${color}"><div class="dim-value">${v.toFixed(1)}</div><div class="dim-label">${dimLabels[i]}</div></div>`;
+    }).join('')}</div></div>`;
+  }).join('');
+
+  // Q2 table
+  const tbody = document.querySelector('#q2-table tbody');
+  tbody.innerHTML = DATA.q2_samples.map(e => {
+    const qolScore = ((e.sa+e.se+e.sm+e.sr+e.sau+e.sc)/6).toFixed(1);
+    return `<tr><td><strong>${e.name_ja || e.name}</strong><br><small style="color:#999">${e.desc?.substring(0,80)}...</small></td><td>${e.gpt}</td><td>${e.ys||'?'}</td><td>${e.region}</td><td>${qolScore}</td><td>${e.path||''}</td></tr>`;
+  }).join('');
+
+  // Path type bars
+  const maxPath = Math.max(...DATA.path_types.map(p => p[1]));
+  document.getElementById('path-bars').innerHTML = DATA.path_types.map(([name, count]) =>
+    `<div class="bar"><div class="bar-label">${name}</div><div class="bar-fill" style="width:${100*count/maxPath}%;opacity:0.8"></div><div class="bar-value">${count.toLocaleString()}</div></div>`
+  ).join('');
+}
+
+init();
+</script>
+</body>
+</html>

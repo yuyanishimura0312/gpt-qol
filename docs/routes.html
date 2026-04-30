@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第二象限ルート解析 — 自動車GPT</title>
+<style>
+:root { --red: #CC1400; --dark: #1a1a1a; --gray: #666; --light: #f5f5f5; --white: #fff; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Sans JP', 'Helvetica Neue', sans-serif; background: var(--white); color: var(--dark); line-height: 1.7; }
+.header { background: var(--dark); color: var(--white); padding: 2rem 3rem; }
+.header h1 { font-size: 1.5rem; font-weight: 300; letter-spacing: 0.1em; }
+.header .sub { color: #999; font-size: 0.85rem; margin-top: 0.3rem; }
+.content { max-width: 1400px; margin: 0 auto; padding: 2rem 3rem; }
+.section { margin-bottom: 3rem; }
+.section h2 { font-size: 1.1rem; font-weight: 600; border-bottom: 2px solid var(--red); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+.section p.insight { background: #fff8f0; border-left: 3px solid #FF9800; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: #333; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+@media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+.card { background: var(--white); border: 1px solid #e0e0e0; padding: 1.5rem; border-radius: 4px; }
+.card h3 { font-size: 0.9rem; color: var(--gray); margin-bottom: 1rem; }
+
+/* Stacked bar chart */
+.era-row { display: flex; align-items: center; margin-bottom: 0.4rem; }
+.era-label { width: 100px; font-size: 0.75rem; color: var(--gray); text-align: right; padding-right: 0.5rem; }
+.era-bar { flex: 1; display: flex; height: 24px; border-radius: 2px; overflow: hidden; }
+.era-bar .seg { display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #fff; font-weight: 600; }
+.era-pct { width: 50px; font-size: 0.75rem; font-weight: 600; padding-left: 0.5rem; color: #1565c0; }
+
+/* Domain conversion */
+.conv-row { display: flex; align-items: center; margin-bottom: 0.35rem; }
+.conv-label { width: 110px; font-size: 0.78rem; color: var(--gray); }
+.conv-bar-bg { flex: 1; height: 18px; background: #eee; border-radius: 2px; position: relative; }
+.conv-bar-fill { height: 100%; border-radius: 2px; }
+.conv-val { width: 55px; font-size: 0.75rem; font-weight: 600; padding-left: 0.5rem; }
+
+/* Radar chart (CSS) */
+.radar { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+.radar-item { text-align: center; }
+.radar-item .qlabel { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
+.dim-row { display: flex; align-items: center; margin-bottom: 0.25rem; font-size: 0.78rem; }
+.dim-name { width: 40px; color: var(--gray); text-align: right; padding-right: 0.4rem; }
+.dim-bar-bg { width: 200px; height: 14px; background: #f0f0f0; border-radius: 2px; position: relative; }
+.dim-bar-fill { height: 100%; border-radius: 2px; position: absolute; top: 0; }
+.dim-bar-zero { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #999; }
+.dim-val { width: 35px; font-size: 0.7rem; font-weight: 600; padding-left: 0.3rem; }
+
+/* Flow diagram */
+.flow { padding: 1rem 0; }
+.flow-path { margin-bottom: 2rem; padding: 1.5rem; border-radius: 6px; border: 1px solid #e0e0e0; }
+.flow-path h4 { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+.flow-path .dot { width: 12px; height: 12px; border-radius: 50%; }
+.flow-path .desc { font-size: 0.82rem; color: var(--gray); margin-bottom: 1rem; }
+.flow-nodes { display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap; font-size: 0.78rem; }
+.flow-node { padding: 0.3rem 0.6rem; border-radius: 3px; font-weight: 500; white-space: nowrap; }
+.flow-arrow { color: #999; font-size: 1.2rem; }
+.q-i { background: #e8f5e9; color: #2e7d32; }
+.q-ii { background: #e3f2fd; color: #1565c0; }
+.q-iii { background: #fce4ec; color: #c62828; }
+.q-iv { background: #fff3e0; color: #e65100; }
+.flow-samples { margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid #eee; }
+.flow-samples .sample { font-size: 0.78rem; color: #555; padding: 0.2rem 0; }
+.flow-samples .sample strong { color: var(--dark); }
+
+/* Chain network */
+.chain-viz { padding: 1rem 0; }
+.chain-link { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; font-size: 0.78rem; }
+.chain-from, .chain-to { padding: 0.25rem 0.5rem; border-radius: 3px; }
+.chain-rel { color: #999; font-style: italic; }
+
+.legend { display: flex; gap: 1.5rem; margin: 1rem 0; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+.footer { background: var(--dark); color: #999; padding: 1.5rem 3rem; font-size: 0.75rem; text-align: center; margin-top: 3rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>第二象限ルート解析 — 自動車GPT</h1>
+  <div class="sub">経済に寄与しないが生活の質を高める発展経路の分析 | 30,103事象から抽出</div>
+</div>
+
+<div class="content">
+
+<!-- 1. 時系列象限分布 -->
+<div class="section">
+  <h2>1. 象限IIは「いつ」出現するか — 時系列分布</h2>
+  <p class="insight">通説: 「非経済的QoL向上は技術成熟後に現れる」→ <strong>誤り</strong>。象限II比率は1886年の黎明期から30-37%で安定しており、最初期から並行発生している。</p>
+  <div class="card" id="era-chart"></div>
+</div>
+
+<!-- 2. ドメイン別変換率 -->
+<div class="section">
+  <h2>2. 象限IIへの「変換しやすさ」— ドメイン別</h2>
+  <p class="insight">科学（61.5%）、社会（45.1%）、医療（40.7%）が非経済的QoL向上に繋がりやすい。輸送（16.2%）は繋がりにくい。</p>
+  <div class="card" id="domain-chart"></div>
+</div>
+
+<!-- 3. 6次元シグネチャー -->
+<div class="section">
+  <h2>3. 象限IIの6次元シグネチャー — 何が「残る」か</h2>
+  <p class="insight">経済的価値を失っても最後まで残るQoL次元は<strong>「自律」（-0.29）</strong>と<strong>「意味」（-0.45）</strong>。美的経験（-0.98）は経済と最も連動する。</p>
+  <div class="radar" id="dim-chart"></div>
+</div>
+
+<!-- 4. 5つの発展経路 -->
+<div class="section">
+  <h2>4. 第二象限への5つの発展経路</h2>
+  <div class="flow" id="flow-chart"></div>
+</div>
+
+<!-- 5. 象限遷移ネットワーク -->
+<div class="section">
+  <h2>5. 象限遷移ネットワーク — 第二象限に到達するチェーン</h2>
+  <p class="insight">I→II（15件）が最多。経済的成功を経て非経済的QoLへ移行するパターン。III→II（2件）は負の状態からの回復。</p>
+  <div class="card">
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#4CAF50"></div>象限I (QoL+/Econ+)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2196F3"></div>象限II (QoL+/Econ-)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#F44336"></div>象限III (QoL-/Econ-)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FF9800"></div>象限IV (QoL-/Econ+)</div>
+    </div>
+    <div id="chain-chart"></div>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  GPT-QoL Route Analysis Dashboard — Foresight Tools Suite
+</div>
+
+<script>
+const D = {"eras": [{"era": "1886-1909", "q1": 907, "q2": 399, "q3": 7, "q4": 5, "total": 1318}, {"era": "1910-1929", "q1": 1005, "q2": 521, "q3": 8, "q4": 13, "total": 1547}, {"era": "1930-1949", "q1": 1016, "q2": 608, "q3": 8, "q4": 13, "total": 1645}, {"era": "1950-1969", "q1": 3210, "q2": 1515, "q3": 17, "q4": 43, "total": 4785}, {"era": "1970-1989", "q1": 3527, "q2": 1755, "q3": 24, "q4": 18, "total": 5324}, {"era": "1990-2009", "q1": 4527, "q2": 2347, "q3": 61, "q4": 23, "total": 6958}, {"era": "2010-2026", "q1": 5158, "q2": 2968, "q3": 14, "q4": 17, "total": 8157}], "domain_conversion": [{"domain": "scientific", "q2": 315, "total": 512, "pct": 61.5, "qol": 2.14}, {"domain": "social", "q2": 450, "total": 997, "pct": 45.1, "qol": 2.66}, {"domain": "healthcare", "q2": 417, "total": 1024, "pct": 40.7, "qol": 2.06}, {"domain": "urban", "q2": 849, "total": 2094, "pct": 40.5, "qol": 1.83}, {"domain": "domestic", "q2": 112, "total": 287, "pct": 39.0, "qol": 2.78}, {"domain": "other", "q2": 4687, "total": 12446, "pct": 37.7, "qol": 1.4}, {"domain": "culture", "q2": 608, "total": 1707, "pct": 35.6, "qol": 2.81}, {"domain": "commerce", "q2": 792, "total": 2588, "pct": 30.6, "qol": 1.67}, {"domain": "political", "q2": 265, "total": 874, "pct": 30.3, "qol": 1.84}, {"domain": "communication", "q2": 81, "total": 277, "pct": 29.2, "qol": 2.57}, {"domain": "education", "q2": 41, "total": 146, "pct": 28.1, "qol": 2.66}, {"domain": "labor", "q2": 388, "total": 1493, "pct": 26.0, "qol": 2.47}, {"domain": "leisure", "q2": 524, "total": 2131, "pct": 24.6, "qol": 2.97}, {"domain": "artistic", "q2": 310, "total": 1554, "pct": 19.9, "qol": 2.64}, {"domain": "rural", "q2": 12, "total": 67, "pct": 17.9, "qol": 2.72}, {"domain": "transportation", "q2": 251, "total": 1546, "pct": 16.2, "qol": 1.82}, {"domain": "spiritual", "q2": 8, "total": 168, "pct": 4.8, "qol": 3.29}, {"domain": "military", "q2": 3, "total": 192, "pct": 1.6, "qol": 3.28}], "dim_signatures": {"I": {"aesthetic": 2.34, "emotional": 2.56, "meaning": 2.84, "relational": 2.26, "autonomy": 2.6, "cultural": 2.46}, "II": {"aesthetic": 1.36, "emotional": 1.73, "meaning": 2.39, "relational": 1.67, "autonomy": 2.31, "cultural": 1.71}, "III": {"aesthetic": -0.78, "emotional": -1.29, "meaning": 0.01, "relational": -0.48, "autonomy": -0.35, "cultural": -0.55}, "IV": {"aesthetic": -1.04, "emotional": -1.28, "meaning": 0.23, "relational": -0.33, "autonomy": -0.63, "cultural": -0.69}}, "chains": [{"from": "個人的読書体験", "from_q": "II", "rel": "prerequisite", "to": "ケルアック『路上』とロードムービー", "to_q": "II", "from_year": 1500, "to_year": 1957}, {"from": "観光の誕生", "from_q": "I", "rel": "evolved_from", "to": "ロードトリップ文化", "to_q": "I", "from_year": 1830, "to_year": 1930}, {"from": "観光の誕生", "from_q": "I", "rel": "inspired", "to": "日曜ドライブの家族儀式", "to_q": "II", "from_year": 1830, "to_year": 1920}, {"from": "夜間活動の拡張", "from_q": "I", "rel": "enabled", "to": "ドライブインシネマ", "to_q": "I", "from_year": 1890, "to_year": 1933}, {"from": "大量生産（フォードT型）", "from_q": "I", "rel": "enabled", "to": "郊外化", "to_q": "IV", "from_year": 1908, "to_year": 1920}, {"from": "大量生産（フォードT型）", "from_q": "I", "rel": "enabled", "to": "ロードトリップ文化", "to_q": "I", "from_year": 1908, "to_year": 1930}, {"from": "大量生産（フォードT型）", "from_q": "I", "rel": "inspired", "to": "個人的自由の象徴", "to_q": "I", "from_year": 1908, "to_year": 1920}, {"from": "大量生産（フォードT型）", "from_q": "I", "rel": "enabled", "to": "日曜ドライブの家族儀式", "to_q": "II", "from_year": 1908, "to_year": 1920}, {"from": "大量生産（フォードT型）", "from_q": "I", "rel": "prerequisite", "to": "ローライダー文化", "to_q": "II", "from_year": 1908, "to_year": 1940}, {"from": "大量生産（フォードT型）", "from_q": "I", "rel": "prerequisite", "to": "車椅子対応車両", "to_q": "II", "from_year": 1908, "to_year": 1945}, {"from": "大量生産（フォードT型）", "from_q": "I", "rel": "enabled", "to": "自動車への感情的愛着", "to_q": "II", "from_year": 1908, "to_year": 1950}, {"from": "郊外化", "from_q": "IV", "rel": "enabled", "to": "自動車中心設計による社会的孤立", "to_q": "IV", "from_year": 1920, "to_year": 1950}, {"from": "郊外化", "from_q": "IV", "rel": "enabled", "to": "ジェイウォーキングと歩行者排除", "to_q": "III", "from_year": 1920, "to_year": 1920}, {"from": "郊外化", "from_q": "IV", "rel": "enabled", "to": "ロードレージ現象", "to_q": "III", "from_year": 1920, "to_year": 1980}, {"from": "郊外化", "from_q": "IV", "rel": "amplified", "to": "自動車騒音公害", "to_q": "III", "from_year": 1920, "to_year": 1929}, {"from": "個人的自由の象徴", "from_q": "I", "rel": "enabled", "to": "デーティング文化の変容", "to_q": "II", "from_year": 1920, "to_year": 1950}, {"from": "個人的自由の象徴", "from_q": "I", "rel": "inspired", "to": "デーティング文化の変容", "to_q": "II", "from_year": 1920, "to_year": 1950}, {"from": "個人的自由の象徴", "from_q": "I", "rel": "inspired", "to": "女性の移動の自由", "to_q": "I", "from_year": 1920, "to_year": 1920}, {"from": "個人的自由の象徴", "from_q": "I", "rel": "enabled", "to": "アメリカンクルージング文化", "to_q": "II", "from_year": 1920, "to_year": 1955}, {"from": "個人的自由の象徴", "from_q": "I", "rel": "inspired", "to": "ケルアック『路上』とロードムービー", "to_q": "II", "from_year": 1920, "to_year": 1957}, {"from": "個人的自由の象徴", "from_q": "I", "rel": "inspired", "to": "アフリカ携帯電話革命", "to_q": "I", "from_year": 1920, "to_year": 2000}, {"from": "女性の移動の自由", "from_q": "I", "rel": "parallel", "to": "電話交換手と女性雇用", "to_q": "I", "from_year": 1920, "to_year": 1880}, {"from": "女性の移動の自由", "from_q": "I", "rel": "enabled", "to": "モータースポーツにおける女性", "to_q": "II", "from_year": 1920, "to_year": 1950}, {"from": "ラジオと共有国民文化", "from_q": "I", "rel": "enabled", "to": "アメリカンクルージング文化", "to_q": "II", "from_year": 1920, "to_year": 1955}, {"from": "ラジオと共有国民文化", "from_q": "I", "rel": "enabled", "to": "ホットロッドロック音楽", "to_q": "II", "from_year": 1920, "to_year": 1961}, {"from": "ラジオと共有国民文化", "from_q": "I", "rel": "enabled", "to": "ケルアック『路上』とロードムービー", "to_q": "II", "from_year": 1920, "to_year": 1957}, {"from": "日曜ドライブの家族儀式", "from_q": "II", "rel": "evolved_from", "to": "ロードトリップ文化", "to_q": "I", "from_year": 1920, "to_year": 1930}, {"from": "ジェイウォーキングと歩行者排除", "from_q": "III", "rel": "inspired", "to": "カーフリー運動", "to_q": "II", "from_year": 1920, "to_year": 1991}, {"from": "ジェイウォーキングと歩行者排除", "from_q": "III", "rel": "parallel", "to": "自動車騒音公害", "to_q": "III", "from_year": 1920, "to_year": 1929}, {"from": "ロードトリップ文化", "from_q": "I", "rel": "inspired", "to": "ドライブインシネマ", "to_q": "I", "from_year": 1930, "to_year": 1933}, {"from": "ロードトリップ文化", "from_q": "I", "rel": "inspired", "to": "ドライブイン飲食店", "to_q": "I", "from_year": 1930, "to_year": 1940}, {"from": "ロードトリップ文化", "from_q": "I", "rel": "inspired", "to": "ブルーリッジパークウェイ", "to_q": "II", "from_year": 1930, "to_year": 1935}, {"from": "芸術としての自動車", "from_q": "I", "rel": "evolved_from", "to": "イタリア自動車デザイン・ルネサンス", "to_q": "II", "from_year": 1930, "to_year": 1950}, {"from": "ローライダー文化", "from_q": "II", "rel": "parallel", "to": "クラシックカー修復職人技", "to_q": "II", "from_year": 1940, "to_year": 1970}, {"from": "車椅子対応車両", "from_q": "II", "rel": "enabled", "to": "高齢者モビリティと地域での加齢", "to_q": "II", "from_year": 1945, "to_year": 1970}, {"from": "自動車中心設計による社会的孤立", "from_q": "IV", "rel": "inspired", "to": "カーフリー運動", "to_q": "II", "from_year": 1950, "to_year": 1991}, {"from": "環境汚染", "from_q": "III", "rel": "inspired", "to": "カーフリー運動", "to_q": "II", "from_year": 1950, "to_year": 1991}, {"from": "イタリア自動車デザイン・ルネサンス", "from_q": "II", "rel": "parallel", "to": "1959年キャデラックテールフィンデザイン頂点", "to_q": "II", "from_year": 1950, "to_year": 1955}, {"from": "アメリカンクルージング文化", "from_q": "II", "rel": "parallel", "to": "ドライブインシネマ", "to_q": "I", "from_year": 1955, "to_year": 1933}, {"from": "アメリカンクルージング文化", "from_q": "II", "rel": "inspired", "to": "ホットロッドロック音楽", "to_q": "II", "from_year": 1955, "to_year": 1961}, {"from": "アメリカンクルージング文化", "from_q": "II", "rel": "parallel", "to": "峠レース文化", "to_q": "II", "from_year": 1955, "to_year": 1970}, {"from": "ケルアック『路上』とロードムービー", "from_q": "II", "rel": "inspired", "to": "心理的避難所としての車", "to_q": "II", "from_year": 1957, "to_year": 1950}, {"from": "ホットロッドロック音楽", "from_q": "II", "rel": "inspired", "to": "暴走族サブカルチャー", "to_q": "II", "from_year": 1961, "to_year": 1950}, {"from": "TTY/TDD聴覚障害者電話アクセス", "from_q": "II", "rel": "parallel", "to": "車椅子対応車両", "to_q": "II", "from_year": 1964, "to_year": 1945}], "patterns": {"landscape": {"label": "景観との出会い", "desc": "経済的移動手段→景観体験の媒体→美的QoL", "color": "#2196F3", "icon": "mountain"}, "freedom": {"label": "自由のシンボル化", "desc": "効率ツール→文化的アイコン→社会的転用", "color": "#4CAF50", "icon": "freedom"}, "passion": {"label": "技術への情熱の文化化", "desc": "発明→愛好家コミュニティ→意味の共有", "color": "#FF9800", "icon": "fire"}, "heritage": {"label": "産業遺産の結晶化", "desc": "生産拠点衰退→ノスタルジア→文化的ID", "color": "#9C27B0", "icon": "museum"}, "resistance": {"label": "負の影響への抵抗", "desc": "公害/孤立→市民抵抗→新たなQoL", "color": "#F44336", "icon": "shield"}}, "pattern_samples": {"landscape": [{"name": "トラックドライバー孤立", "year": 1990, "domain": "healthcare", "qol": 4.666666666666667, "s1": 5, "s2": 5}, {"name": "トラックドライバー保険", "year": 1990, "domain": "healthcare", "qol": 4.666666666666667, "s1": 5, "s2": 5}, {"name": "バイヨンテンプルナイトドライブ", "year": 1995, "domain": "spiritual", "qol": 3.5, "s1": 2, "s2": 4}, {"name": "セナトリビュート", "year": 1995, "domain": "leisure", "qol": 3.3333333333333335, "s1": 5, "s2": 5}, {"name": "日曜ドライブの家族儀式", "year": 1920, "domain": "leisure", "qol": 3.1666666666666665, "s1": 3, "s2": 3}], "freedom": [{"name": "アメリカンクルージング文化", "year": 1955, "domain": "leisure", "qol": 3.5, "s1": 5, "s2": 2}, {"name": "ホットロッドロック音楽", "year": 1961, "domain": "artistic", "qol": 3.5, "s1": 4, "s2": 3}, {"name": "モータースポーツにおける女性", "year": 1950, "domain": "social", "qol": 3.3333333333333335, "s1": 5, "s2": 4}, {"name": "日本女性レーシング・コミュニティ", "year": 1970, "domain": "leisure", "qol": 3.3333333333333335, "s1": 4, "s2": 2}, {"name": "エジプト女性運転ロビー活動", "year": 2005, "domain": "social", "qol": 3.1666666666666665, "s1": 3, "s2": 4}], "passion": [{"name": "ビンテージプレート市場", "year": 1980, "domain": "artistic", "qol": 4.833333333333333, "s1": 5, "s2": 5}, {"name": "ハイパーマイリング", "year": 2005, "domain": "healthcare", "qol": 4.666666666666667, "s1": 5, "s2": 5}, {"name": "クラシックカー修復職人技", "year": 1970, "domain": "artistic", "qol": 3.8333333333333335, "s1": 4, "s2": 5}, {"name": "脱獄 車ファームウェア コミュニティ", "year": 2015, "domain": "culture", "qol": 3.1666666666666665, "s1": 3, "s2": 4}, {"name": "トリム復元製品", "year": 2006, "domain": "culture", "qol": 3.0, "s1": 3, "s2": 4}], "heritage": [{"name": "プレートデザイン史", "year": 1900, "domain": "artistic", "qol": 4.833333333333333, "s1": 5, "s2": 5}, {"name": "ビンテージプレート市場", "year": 1980, "domain": "artistic", "qol": 4.833333333333333, "s1": 5, "s2": 5}, {"name": "クルーロールスロイス遺産", "year": 1946, "domain": "culture", "qol": 3.0, "s1": 4, "s2": 3}, {"name": "オースチンヒーレー", "year": 1953, "domain": "culture", "qol": 3.0, "s1": 4, "s2": 3}, {"name": "英国レーシング遺産", "year": 1906, "domain": "leisure", "qol": 3.0, "s1": 3, "s2": 2}], "resistance": [{"name": "トイレ鍵制度廃止", "year": 1990, "domain": "healthcare", "qol": 4.833333333333333, "s1": 5, "s2": 4}, {"name": "給油ポンプ角配置", "year": 1950, "domain": "healthcare", "qol": 4.833333333333333, "s1": 5, "s2": 4}, {"name": "ハイパーマイリング", "year": 2005, "domain": "healthcare", "qol": 4.666666666666667, "s1": 4, "s2": 4}, {"name": "ローライダー文化", "year": 1940, "domain": "artistic", "qol": 4.5, "s1": 4, "s2": 4}, {"name": "カーフリー運動", "year": 1991, "domain": "urban", "qol": 3.5, "s1": 3, "s2": 5}]}}; (function() {
+  // 1. Era chart
+  const eraDiv = document.getElementById('era-chart');
+  const maxTotal = Math.max(...D.eras.map(e => e.total));
+  const qColors = {q1:'#4CAF50', q2:'#2196F3', q3:'#F44336', q4:'#FF9800'};
+  eraDiv.innerHTML = '<div class="legend" style="margin-bottom:1rem">' +
+    '<div class="legend-item"><div class="legend-dot" style="background:#4CAF50"></div>I: QoL+/Econ+</div>' +
+    '<div class="legend-item"><div class="legend-dot" style="background:#2196F3"></div>II: QoL+/Econ-</div>' +
+    '<div class="legend-item"><div class="legend-dot" style="background:#F44336"></div>III: QoL-/Econ-</div>' +
+    '<div class="legend-item"><div class="legend-dot" style="background:#FF9800"></div>IV: QoL-/Econ+</div></div>' +
+    D.eras.map(e => {
+      const pct = k => (100 * e[k] / e.total).toFixed(1);
+      const q2pct = (100 * e.q2 / e.total).toFixed(1);
+      return `<div class="era-row">
+        <div class="era-label">${e.era}</div>
+        <div class="era-bar">
+          <div class="seg" style="width:${pct('q1')}%;background:${qColors.q1}">${e.q1>200?e.q1.toLocaleString():''}</div>
+          <div class="seg" style="width:${pct('q2')}%;background:${qColors.q2}">${e.q2>100?e.q2.toLocaleString():''}</div>
+          <div class="seg" style="width:${pct('q3')}%;background:${qColors.q3}"></div>
+          <div class="seg" style="width:${pct('q4')}%;background:${qColors.q4}"></div>
+        </div>
+        <div class="era-pct">${q2pct}%</div>
+      </div>`;
+    }).join('');
+
+  // 2. Domain conversion
+  const domDiv = document.getElementById('domain-chart');
+  domDiv.innerHTML = D.domain_conversion.slice(0, 12).map(d => {
+    const color = d.pct > 40 ? '#1565c0' : d.pct > 30 ? '#42A5F5' : d.pct > 20 ? '#90CAF9' : '#BBDEFB';
+    return `<div class="conv-row">
+      <div class="conv-label">${d.domain}</div>
+      <div class="conv-bar-bg"><div class="conv-bar-fill" style="width:${d.pct}%;background:${color}"></div></div>
+      <div class="conv-val">${d.pct}%</div>
+    </div>`;
+  }).join('');
+
+  // 3. Dimension signatures
+  const dimDiv = document.getElementById('dim-chart');
+  const dims = ['aesthetic','emotional','meaning','relational','autonomy','cultural'];
+  const dimJa = ['美的','感情','意味','関係','自律','文化'];
+  const qLabels = {I:'象限I (QoL+/Econ+)', II:'象限II (QoL+/Econ-)', IV:'象限IV (QoL-/Econ+)'};
+  const qClrs = {I:'#4CAF50', II:'#2196F3', IV:'#FF9800'};
+  dimDiv.innerHTML = ['I','II','IV'].map(q => {
+    const s = D.dim_signatures[q];
+    return `<div class="radar-item"><div class="qlabel" style="color:${qClrs[q]}">${qLabels[q]}</div>` +
+      dims.map((d,i) => {
+        const v = s[d];
+        const pct = 50 + (v / 5) * 50;
+        const w = Math.abs(v) / 5 * 50;
+        const left = v >= 0 ? 50 : 50 - w;
+        return `<div class="dim-row">
+          <div class="dim-name">${dimJa[i]}</div>
+          <div class="dim-bar-bg">
+            <div class="dim-bar-zero"></div>
+            <div class="dim-bar-fill" style="left:${left}%;width:${w}%;background:${qClrs[q]};opacity:0.7"></div>
+          </div>
+          <div class="dim-val">${v.toFixed(1)}</div>
+        </div>`;
+      }).join('') + '</div>';
+  }).join('');
+
+  // 4. Flow patterns
+  const flowDiv = document.getElementById('flow-chart');
+  const P = D.patterns;
+  const S = D.pattern_samples;
+  const pathOrder = ['landscape','freedom','passion','heritage','resistance'];
+  const pathFlows = {
+    landscape: [{t:'経済的移動手段',q:'q-i'},{t:'景観体験の媒体',q:'q-i'},{t:'美的・感情的QoL',q:'q-ii'}],
+    freedom: [{t:'効率化ツール',q:'q-iv'},{t:'自由のシンボル',q:'q-i'},{t:'文化的転用',q:'q-ii'}],
+    passion: [{t:'技術的発明',q:'q-i'},{t:'愛好家コミュニティ',q:'q-i'},{t:'意味の共有文化',q:'q-ii'}],
+    heritage: [{t:'経済的生産拠点',q:'q-i'},{t:'産業衰退',q:'q-iii'},{t:'遺産・ノスタルジア',q:'q-ii'}],
+    resistance: [{t:'負の影響(公害等)',q:'q-iii'},{t:'市民の抵抗',q:'q-iv'},{t:'新たなQoL回復',q:'q-ii'}],
+  };
+
+  flowDiv.innerHTML = pathOrder.map(k => {
+    const p = P[k];
+    const flow = pathFlows[k];
+    const samps = S[k] || [];
+    return `<div class="flow-path">
+      <h4><div class="dot" style="background:${p.color}"></div>${p.label}</h4>
+      <div class="desc">${p.desc}</div>
+      <div class="flow-nodes">
+        ${flow.map((n,i) =>
+          `<div class="flow-node ${n.q}">${n.t}</div>${i<flow.length-1?'<div class="flow-arrow">→</div>':''}`
+        ).join('')}
+      </div>
+      ${samps.length ? `<div class="flow-samples">${samps.map(s =>
+        `<div class="sample"><strong>${s.name}</strong> (${s.year||'?'}) QoL=${s.qol?.toFixed(1)||'?'}</div>`
+      ).join('')}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  // 5. Chain network
+  const chainDiv = document.getElementById('chain-chart');
+  const qClass = q => q==='I'?'q-i':q==='II'?'q-ii':q==='III'?'q-iii':'q-iv';
+  // Filter to show only cross-quadrant chains involving Q-II
+  const q2chains = D.chains.filter(c => c.to_q === 'II' || c.from_q === 'II');
+  chainDiv.innerHTML = q2chains.map(c =>
+    `<div class="chain-link">
+      <div class="chain-from ${qClass(c.from_q)}">${c.from} [${c.from_q}]</div>
+      <div class="chain-rel">—${c.rel}→</div>
+      <div class="chain-to ${qClass(c.to_q)}">${c.to} [${c.to_q}]</div>
+    </div>`
+  ).join('') || '<div style="color:#999;font-size:0.85rem">象限II関連の遷移チェーンを表示</div>';
+})();
+</script>
+</body>
+</html>

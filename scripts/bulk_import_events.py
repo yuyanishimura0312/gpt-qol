@@ -209,6 +209,18 @@ def main():
         ('/tmp/auto_racing_events.txt', 'Automobile'),
         ('/tmp/electricity_final_80.txt', 'Electricity'),
         ('/tmp/auto_final_300.txt', 'Automobile'),
+        # Round 3: 1000-target expansion
+        ('/tmp/tel_batch_a.txt', 'Telephone'),
+        ('/tmp/tel_batch_b.txt', 'Telephone'),
+        ('/tmp/elec_batch_a.txt', 'Electricity'),
+        ('/tmp/elec_batch_b.txt', 'Electricity'),
+        ('/tmp/steam_batch_a.txt', 'Steam Engine'),
+        ('/tmp/steam_batch_b.txt', 'Steam Engine'),
+        ('/tmp/print_batch_a.txt', 'Printing Press'),
+        ('/tmp/print_batch_b.txt', 'Printing Press'),
+        # Round 4: Auto 10K
+        ('/tmp/auto_10k_a.txt', 'Automobile'),
+        ('/tmp/auto_10k_b.txt', 'Automobile'),
     ]
 
     # Also try to extract pipe data from electricity agent output

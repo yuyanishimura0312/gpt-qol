@@ -199,6 +199,7 @@ def main():
         ('/tmp/printing_press_gpt_events.txt', 'Printing Press'),
         ('/tmp/printing_press_qol_events.txt', 'Printing Press'),
         ('/tmp/steam_engine_events.txt', 'Steam Engine'),
+        ('/tmp/automobile_events_final.txt', 'Automobile'),
     ]
 
     total = 0

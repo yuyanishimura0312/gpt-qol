@@ -225,6 +225,9 @@ def main():
         ('/tmp/auto_10k_d.txt', 'Automobile'),
         ('/tmp/auto_10k_e.txt', 'Automobile'),
         ('/tmp/steam_final.txt', 'Steam Engine'),
+        ('/tmp/auto_10k_b_part1.txt', 'Automobile'),
+        ('/tmp/auto_10k_f.txt', 'Automobile'),
+        ('/tmp/auto_10k_g.txt', 'Automobile'),
     ]
 
     # Also try to extract pipe data from electricity agent output

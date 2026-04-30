@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>レバレッジポイント・システム — 第二象限への介入点</title>
+<style>
+:root{--red:#CC1400;--dark:#1a1a1a;--gray:#666;--light:#f5f5f5;--white:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans JP','Helvetica Neue',sans-serif;background:var(--white);color:var(--dark);line-height:1.7}
+.header{background:var(--dark);color:var(--white);padding:2rem 3rem}
+.header h1{font-size:1.5rem;font-weight:300;letter-spacing:.1em}
+.header .sub{color:#999;font-size:.85rem;margin-top:.3rem}
+.content{max-width:1400px;margin:0 auto;padding:2rem 3rem}
+.section{margin-bottom:3rem}
+.section h2{font-size:1.1rem;font-weight:600;border-bottom:2px solid var(--red);padding-bottom:.5rem;margin-bottom:1rem}
+.insight{background:#fff8f0;border-left:3px solid #FF9800;padding:1rem;margin-bottom:1.5rem;font-size:.9rem;color:#333}
+.card{background:var(--white);border:1px solid #e0e0e0;padding:1.5rem;border-radius:4px;margin-bottom:1.5rem}
+.card h3{font-size:.9rem;color:var(--gray);margin-bottom:1rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+@media(max-width:900px){.grid-2{grid-template-columns:1fr}}
+
+/* System diagram */
+.system{position:relative;padding:1rem 0}
+.layer{margin-bottom:1.5rem;padding:1.2rem;border-radius:6px;border:1px solid #e0e0e0;position:relative}
+.layer-name{font-size:.85rem;font-weight:700;margin-bottom:.8rem;padding:.3rem .6rem;border-radius:3px;display:inline-block}
+.layer-items{display:flex;flex-wrap:wrap;gap:.8rem}
+.layer-item{flex:1;min-width:200px;padding:.8rem;border-radius:4px;border:1px solid #eee;font-size:.8rem}
+.layer-item .item-id{font-weight:700;font-size:.7rem;color:var(--gray)}
+.layer-item .item-label{font-weight:600;margin:.2rem 0}
+.layer-item .item-desc{color:var(--gray);font-size:.75rem}
+.layer-item .item-evidence{font-size:.7rem;color:var(--red);margin-top:.3rem}
+.arrow-down{text-align:center;font-size:1.5rem;color:#ccc;margin:.5rem 0}
+
+/* Origin cards */
+.origin{padding:1rem;border-left:3px solid;margin-bottom:.8rem;background:#fafafa;border-radius:0 4px 4px 0}
+.origin .o-name{font-weight:600;font-size:.9rem}
+.origin .o-meta{font-size:.75rem;color:var(--gray);margin:.2rem 0}
+.origin .o-scores{display:flex;gap:.3rem;flex-wrap:wrap;margin:.3rem 0}
+.origin .o-scores span{padding:.1rem .4rem;border-radius:2px;font-size:.7rem;font-weight:600}
+.origin .o-desc{font-size:.78rem;color:#555;margin-top:.3rem}
+
+/* Profile bars */
+.profile-row{display:flex;align-items:center;margin-bottom:.4rem}
+.profile-label{width:110px;font-size:.78rem}
+.profile-bar{flex:1;height:20px;background:#eee;border-radius:2px;position:relative}
+.profile-fill{height:100%;border-radius:2px;transition:width .3s}
+.profile-val{width:80px;font-size:.75rem;padding-left:.5rem}
+
+/* Trigger */
+.trigger-row{display:flex;align-items:center;margin-bottom:.4rem}
+.trigger-label{width:120px;font-size:.78rem}
+.trigger-bar{flex:1;height:18px;background:#eee;border-radius:2px}
+.trigger-fill{height:100%;border-radius:2px}
+.trigger-val{width:60px;font-size:.75rem;padding-left:.5rem;font-weight:600}
+
+/* Combo */
+.combo-item{display:flex;align-items:center;margin-bottom:.3rem;font-size:.78rem}
+.combo-label{width:200px}
+.combo-bar{flex:1;height:16px;background:#eee;border-radius:2px}
+.combo-fill{height:100%;border-radius:2px}
+.combo-val{width:50px;padding-left:.5rem;font-weight:600;font-size:.75rem}
+.combo-ex{width:200px;color:var(--gray);font-size:.7rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Activation */
+.act-row{display:flex;align-items:center;margin-bottom:.5rem}
+.act-order{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#fff;margin-right:.8rem}
+.act-info{flex:1}
+.act-name{font-weight:600;font-size:.9rem}
+.act-score{font-size:.8rem;color:var(--gray)}
+.act-role{font-size:.7rem;padding:.15rem .4rem;border-radius:2px;margin-left:.5rem}
+
+.footer{background:var(--dark);color:#999;padding:1.5rem 3rem;font-size:.75rem;text-align:center;margin-top:3rem}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>レバレッジポイント・システム</h1>
+  <div class="sub">第二象限への初期動作フレームワーク — 自動車GPT 30,103事象からの抽出</div>
+</div>
+
+<div class="content">
+
+<div class="section">
+  <h2>システム全体図 — 5層レバレッジモデル</h2>
+  <p class="insight">汎用技術が「経済に寄与しないが生活の質を高める」ルートに到達するには、5つの層を順に通過する必要がある。各層にレバレッジポイント（介入点）が存在する。</p>
+  <div class="system" id="system-diagram"></div>
+</div>
+
+<div class="section">
+  <h2>起点事象 — 第二象限への遷移を引き起こした「種」</h2>
+  <p class="insight">象限I（経済的成功）から象限IIへの遷移を最も多く引き起こした事象が、レバレッジポイントの実例。「大量生産」と「自由のシンボル化」が2大起点。</p>
+  <div id="origins"></div>
+</div>
+
+<div class="grid-2">
+  <div class="section">
+    <h2>6次元支配パターン — 何が象限IIを特徴づけるか</h2>
+    <div class="card" id="profiles"></div>
+  </div>
+  <div class="section">
+    <h2>トリガー構造 — 何が第二象限を発火させるか</h2>
+    <div class="card" id="triggers"></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>ドメイン×トリガーの高QoL組み合わせ — 最も効果的な「介入点」</h2>
+  <p class="insight">どの分野で、どのトリガーが発火した時に、最も高いQoLが実現されるか。これがロボティクスにおける具体的な介入点の候補となる。</p>
+  <div class="card" id="combos"></div>
+</div>
+
+<div class="section">
+  <h2>QoL次元の活性化順序 — 「意味」から始まり「関係」で完成する</h2>
+  <div class="card" id="activation"></div>
+</div>
+
+</div>
+<div class="footer">GPT-QoL Leverage Point System — Foresight Tools Suite</div>
+
+<script>
+const D = {"origins": [{"name": "観光の誕生", "quadrant": "I", "year": 1830, "domain": "leisure", "scores": {"a": 3, "e": 3, "m": 2, "r": 2, "au": 3, "c": 3, "econ": 3}, "path": "serendipitous", "q2_count": 1, "descendants": ["日曜ドライブの家族儀式"]}, {"name": "大量生産（フォードT型）", "quadrant": "I", "year": 1908, "domain": "commerce", "scores": {"a": 0, "e": 0, "m": 1, "r": 0, "au": 3, "c": 0, "econ": 5}, "path": "linear", "q2_count": 4, "descendants": ["日曜ドライブの家族儀式", "ローライダー文化", "車椅子対応車両", "自動車への感情的愛着"]}, {"name": "個人的自由の象徴", "quadrant": "I", "year": 1920, "domain": "social", "scores": {"a": 2, "e": 3, "m": 3, "r": 0, "au": 5, "c": 3, "econ": 1}, "path": "grassroots", "q2_count": 4, "descendants": ["デーティング文化の変容", "デーティング文化の変容", "アメリカンクルージング文化", "ケルアック『路上』とロードムービー"]}, {"name": "女性の移動の自由", "quadrant": "I", "year": 1920, "domain": "social", "scores": {"a": 0, "e": 2, "m": 2, "r": 1, "au": 4, "c": 1, "econ": 1}, "path": "appropriation", "q2_count": 1, "descendants": ["モータースポーツにおける女性"]}, {"name": "ラジオと共有国民文化", "quadrant": "I", "year": 1920, "domain": "culture", "scores": {"a": 3, "e": 3, "m": 1, "r": 3, "au": 0, "c": 4, "econ": 3}, "path": "serendipitous", "q2_count": 3, "descendants": ["アメリカンクルージング文化", "ホットロッドロック音楽", "ケルアック『路上』とロードムービー"]}, {"name": "ジェイウォーキングと歩行者排除", "quadrant": "III", "year": 1920, "domain": "urban", "scores": {"a": -3, "e": -3, "m": -2, "r": -4, "au": -5, "c": -3, "econ": -2}, "path": "serendipitous", "q2_count": 1, "descendants": ["カーフリー運動"]}, {"name": "ロードトリップ文化", "quadrant": "I", "year": 1930, "domain": "leisure", "scores": {"a": 3, "e": 4, "m": 2, "r": 2, "au": 4, "c": 3, "econ": 2}, "path": "grassroots", "q2_count": 1, "descendants": ["ブルーリッジパークウェイ"]}, {"name": "芸術としての自動車", "quadrant": "I", "year": 1930, "domain": "artistic", "scores": {"a": 4, "e": 2, "m": 1, "r": 0, "au": 0, "c": 3, "econ": 3}, "path": "serendipitous", "q2_count": 1, "descendants": ["イタリア自動車デザイン・ルネサンス"]}, {"name": "自動車中心設計による社会的孤立", "quadrant": "IV", "year": 1950, "domain": "urban", "scores": {"a": -2, "e": -3, "m": -1, "r": -4, "au": 1, "c": -3, "econ": 2}, "path": "serendipitous", "q2_count": 1, "descendants": ["カーフリー運動"]}, {"name": "環境汚染", "quadrant": "III", "year": 1950, "domain": "other", "scores": {"a": -3, "e": -1, "m": -1, "r": 0, "au": 0, "c": -2, "econ": -1}, "path": "serendipitous", "q2_count": 1, "descendants": ["カーフリー運動"]}], "profiles": [{"pattern": "意味+自律", "count": 1399, "pct": 18.9, "avg_qol": 1.42, "examples": [{"name": "車椅子対応車両", "year": 1945, "qol": 3.0}, {"name": "自動運転車の高齢者・障害者向け", "year": 2015, "qol": 1.3}, {"name": "日本中古車スティグマ階級", "year": 1980, "qol": 1.2}]}, {"pattern": "意味+関係", "count": 933, "pct": 12.6, "avg_qol": 1.83, "examples": [{"name": "ホワイトアウト状態ナビゲーション", "year": 1945, "qol": 0.3}, {"name": "モンスーン季節運転", "year": 1980, "qol": 1.3}, {"name": "ドライブレコーダー記録文化", "year": 2016, "qol": 1.8}]}, {"pattern": "感情+意味", "count": 878, "pct": 11.8, "avg_qol": 1.49, "examples": [{"name": "ケルアック『路上』とロードムービー", "year": 1957, "qol": 4.2}, {"name": "自動車への感情的愛着", "year": 1950, "qol": 3.2}, {"name": "配車サービスのジェンダー安全機能", "year": 2019, "qol": 1.3}]}, {"pattern": "意味+美的", "count": 654, "pct": 8.8, "avg_qol": 1.37, "examples": [{"name": "計画的陳腐化と自動車設計", "year": 1950, "qol": 1.2}, {"name": "モデルイヤーサイクルと消費者願望", "year": 1920, "qol": 1.3}, {"name": "カーローン広告と債務拡大", "year": 1980, "qol": 1.2}]}, {"pattern": "自律+意味", "count": 605, "pct": 8.2, "avg_qol": 1.56, "examples": [{"name": "モータースポーツにおける女性", "year": 1950, "qol": 3.3}, {"name": "高齢者モビリティと地域での加齢", "year": 1970, "qol": 2.7}, {"name": "熱波エンジン故障", "year": 1916, "qol": 1.5}]}, {"pattern": "美的+自律", "count": 507, "pct": 6.8, "avg_qol": 1.33, "examples": [{"name": "自動車排ガスの鉛汚染", "year": 1923, "qol": 1.0}, {"name": "飲酒運転と交通事故予防", "year": 1980, "qol": 2.2}, {"name": "速度制限と交通事故死亡", "year": 1974, "qol": 1.5}]}, {"pattern": "美的+感情", "count": 387, "pct": 5.2, "avg_qol": 2.59, "examples": [{"name": "1959年キャデラックテールフィンデザイン頂点", "year": 1955, "qol": 2.8}, {"name": "電動車両の音響変容", "year": 2010, "qol": 0.7}, {"name": "ビジョンゼロ・ウーバー・トラフィック", "year": 1995, "qol": 2.5}]}, {"pattern": "関係+感情", "count": 219, "pct": 3.0, "avg_qol": 2.61, "examples": [{"name": "カー・アズ・スリープ・スペース・ホームレス・アダプテーション", "year": 2000, "qol": 1.8}, {"name": "ワイヤレス携帯充電", "year": 1991, "qol": 2.5}, {"name": "キャビンエアフィルトレーションシステム", "year": 1962, "qol": 2.5}]}, {"pattern": "美的+文化", "count": 203, "pct": 2.7, "avg_qol": 2.65, "examples": [{"name": "イタリア自動車デザイン・ルネサンス", "year": 1950, "qol": 2.8}, {"name": "ブルーリッジパークウェイ", "year": 1935, "qol": 3.0}, {"name": "インド・トラック美術伝統", "year": 1920, "qol": 3.2}]}, {"pattern": "自律+美的", "count": 187, "pct": 2.5, "avg_qol": 2.07, "examples": [{"name": "カーフリーエリアと上流階級", "year": 2000, "qol": 1.3}, {"name": "SAE自動運転レベル", "year": 2016, "qol": 0.8}, {"name": "テスラ致命的事故", "year": 2016, "qol": 0.2}]}, {"pattern": "意味+感情", "count": 178, "pct": 2.4, "avg_qol": 2.02, "examples": [{"name": "解体ヤードスキャンダル", "year": 2005, "qol": 0.5}, {"name": "パノラミックサンルーフ安全性", "year": 2020, "qol": 2.2}, {"name": "チャイルドブースターシート安全性", "year": 1919, "qol": 2.2}]}, {"pattern": "感情+自律", "count": 155, "pct": 2.1, "avg_qol": 2.54, "examples": [{"name": "ホットロッドロック音楽", "year": 1961, "qol": 3.5}, {"name": "心理的避難所としての車", "year": 1950, "qol": 2.7}, {"name": "峠レース文化", "year": 1970, "qol": 4.0}]}], "triggers": [{"cat": "複合/不明", "count": 4121, "pct": 55.6, "examples": []}, {"cat": "技術転換", "count": 1861, "pct": 25.1, "examples": [{"name": "デーティング文化の変容", "year": 1950}, {"name": "自動運転車の高齢者・障害者向け", "year": 2015}]}, {"cat": "市場の力", "count": 1576, "pct": 21.3, "examples": [{"name": "ブルーリッジパークウェイ", "year": 1935}, {"name": "配車サービスのジェンダー安全機能", "year": 2019}]}, {"cat": "規制政策", "count": 601, "pct": 8.1, "examples": [{"name": "ディーラーフロア資金計画マークアップ", "year": 1970}, {"name": "シートベルト抵抗と安全文化", "year": 1966}]}, {"cat": "安全危機", "count": 464, "pct": 6.3, "examples": [{"name": "電動車両の音響変容", "year": 2010}, {"name": "配車サービスのジェンダー安全機能", "year": 2019}]}, {"cat": "文化的動機", "count": 453, "pct": 6.1, "examples": [{"name": "暴走族サブカルチャー", "year": 1950}, {"name": "ホットロッドロック音楽", "year": 1961}]}, {"cat": "都市変容", "count": 423, "pct": 5.7, "examples": [{"name": "暴走族サブカルチャー", "year": 1950}, {"name": "心理的避難所としての車", "year": 1950}]}, {"cat": "経済危機", "count": 390, "pct": 5.3, "examples": [{"name": "ローライダー文化", "year": 1940}, {"name": "バンライフムーブメント", "year": 2011}]}, {"cat": "環境危機", "count": 344, "pct": 4.6, "examples": [{"name": "カーフリー運動", "year": 1991}, {"name": "カーフリーエリアと上流階級", "year": 2000}]}, {"cat": "社会運動", "count": 286, "pct": 3.9, "examples": [{"name": "ローライダー文化", "year": 1940}, {"name": "暴走族サブカルチャー", "year": 1950}]}, {"cat": "美的追求", "count": 163, "pct": 2.2, "examples": [{"name": "イタリア自動車デザイン・ルネサンス", "year": 1950}, {"name": "カーフリー運動", "year": 1991}]}, {"cat": "自由渇望", "count": 12, "pct": 0.2, "examples": [{"name": "デーティング文化の変容", "year": 1950}, {"name": "モータースポーツにおける女性", "year": 1950}]}], "combos": [{"combo": "labor×市場の力", "count": 156, "avg_qol": 3.11, "example": "デトロイト工場閉鎖と脱工業化"}, {"combo": "leisure×文化的動機", "count": 28, "avg_qol": 3.03, "example": "峠レース文化"}, {"combo": "leisure×規制政策", "count": 9, "avg_qol": 3.0, "example": "肩ラップシートベルト"}, {"combo": "artistic×社会運動", "count": 10, "avg_qol": 2.95, "example": "ローライダー文化"}, {"combo": "leisure×安全危機", "count": 7, "avg_qol": 2.95, "example": "雪吹き溜まり回避"}, {"combo": "culture×規制政策", "count": 10, "avg_qol": 2.93, "example": "AUTOMOBILE_GENDER（項目18）"}, {"combo": "leisure×市場の力", "count": 34, "avg_qol": 2.91, "example": "ブルーリッジパークウェイ"}, {"combo": "culture×安全危機", "count": 11, "avg_qol": 2.91, "example": "バイクキャリアエコシステム"}, {"combo": "culture×経済危機", "count": 15, "avg_qol": 2.87, "example": "AUTOMOBILE_GENDER（項目14）"}, {"combo": "culture×都市変容", "count": 14, "avg_qol": 2.86, "example": "郊外自動車文化依存"}, {"combo": "social×環境危機", "count": 35, "avg_qol": 2.85, "example": "トウバークラスシステム"}, {"combo": "culture×技術転換", "count": 10, "avg_qol": 2.83, "example": "ダッシュボード録画 ドライブレコーダー文化"}, {"combo": "domestic×文化的動機", "count": 37, "avg_qol": 2.82, "example": "ウェディングカー白リムジーン伝統"}, {"combo": "social×規制政策", "count": 31, "avg_qol": 2.82, "example": "AUTOMOBILE_GENDER（項目10）"}, {"combo": "culture×文化的動機", "count": 119, "avg_qol": 2.8, "example": "ライフスタイルマーケティングと自動車"}, {"combo": "culture×社会運動", "count": 107, "avg_qol": 2.79, "example": "カープール文化と地域破壊"}, {"combo": "domestic×市場の力", "count": 24, "avg_qol": 2.78, "example": "ヨーロッパ葬儀車フリート"}, {"combo": "leisure×経済危機", "count": 12, "avg_qol": 2.78, "example": "日本女性レーシング・コミュニティ"}, {"combo": "culture×市場の力", "count": 35, "avg_qol": 2.77, "example": "ホンダシビック燃費効率"}, {"combo": "social×市場の力", "count": 61, "avg_qol": 2.76, "example": "リース文化と身分表示"}, {"combo": "artistic×文化的動機", "count": 49, "avg_qol": 2.74, "example": "ホットロッドロック音楽"}, {"combo": "social×文化的動機", "count": 31, "avg_qol": 2.73, "example": "暴走族サブカルチャー"}, {"combo": "artistic×規制政策", "count": 6, "avg_qol": 2.72, "example": "シンガポール・カー・ライト・ディストリクト"}, {"combo": "social×経済危機", "count": 38, "avg_qol": 2.71, "example": "カー・アズ・スリープ・スペース・ホームレス・アダプテーション"}, {"combo": "culture×環境危機", "count": 16, "avg_qol": 2.7, "example": "シートカバー大量生産"}], "dim_activation": [{"dim": "意味", "score": 2.394, "role": "主軸"}, {"dim": "自律", "score": 2.306, "role": "主軸"}, {"dim": "文化", "score": 1.708, "role": "補助"}, {"dim": "感情", "score": 1.731, "role": "補助"}, {"dim": "美的", "score": 1.357, "role": "最終"}, {"dim": "関係", "score": 1.675, "role": "最終"}], "leverage_system": {"layers": [{"name": "Layer 1: 前提条件", "items": [{"id": "L1-1", "label": "技術の大量普及", "desc": "Mass Adoption Threshold — 人口の過半数がアクセス可能になる閾値"}, {"id": "L1-2", "label": "経済的価値の安定", "desc": "Economic Value Plateau — 経済的効率化の限界効用が逓減し始める点"}, {"id": "L1-3", "label": "ユーザーの余剰的利用", "desc": "Surplus Use Capacity — 本来の目的以外に使う余裕が生まれる状態"}]}, {"name": "Layer 2: トリガー（発火条件）", "items": [{"id": "L2-A", "label": "文化的動機の発生", "desc": "Cultural Motive — 技術が文化的アイデンティティに取り込まれる", "evidence": "453件"}, {"id": "L2-B", "label": "安全/環境危機の顕在化", "desc": "Crisis Visibility — 技術の負の側面が社会問題として可視化される", "evidence": "808件"}, {"id": "L2-C", "label": "社会運動の組織化", "desc": "Movement Organization — 市民が技術との関係を再定義する運動", "evidence": "286件"}, {"id": "L2-D", "label": "技術的転換点の到来", "desc": "Tech Inflection — 新技術が既存の価値体系を揺さぶる", "evidence": "1861件"}]}, {"name": "Layer 3: 転換メカニズム", "items": [{"id": "L3-1", "label": "目的地化", "desc": "手段→目的の反転 (Transportation → Destination)", "color": "#2196F3"}, {"id": "L3-2", "label": "シンボル化", "desc": "機能→意味の昇華 (Function → Symbol)", "color": "#4CAF50"}, {"id": "L3-3", "label": "コミュニティ化", "desc": "個人利用→共同体形成 (Individual → Community)", "color": "#FF9800"}, {"id": "L3-4", "label": "遺産化", "desc": "現役→記憶の結晶化 (Active → Heritage)", "color": "#9C27B0"}, {"id": "L3-5", "label": "抵抗からの創造", "desc": "反対→新価値の生成 (Resistance → Creation)", "color": "#F44336"}]}, {"name": "Layer 4: QoL次元の活性化", "items": [{"id": "L4-1", "label": "主軸: 意味 + 自律", "desc": "meaning=2.39 + autonomy=2.31"}, {"id": "L4-2", "label": "補助: 文化 + 感情", "desc": "cultural=1.71 + emotional=1.73"}, {"id": "L4-3", "label": "最終: 美的 + 関係", "desc": "aesthetic=1.36 + relational=1.67"}]}, {"name": "Layer 5: 持続条件", "items": [{"id": "L5-1", "label": "経済的価値からの離脱完了", "desc": "経済指標との相関が低下し、独自の価値基盤が確立される"}, {"id": "L5-2", "label": "コミュニティによる再生産", "desc": "価値がコミュニティ内で自律的に再生産される"}, {"id": "L5-3", "label": "適度な制度化", "desc": "制度化されるが、官僚化しない水準を維持する"}]}]}};
+
+// System diagram
+const sysDiv = document.getElementById('system-diagram');
+const layerColors = ['#E3F2FD','#E8F5E9','#FFF3E0','#FCE4EC','#F3E5F5'];
+const layerBorders = ['#1565C0','#2E7D32','#E65100','#C62828','#7B1FA2'];
+sysDiv.innerHTML = D.leverage_system.layers.map((layer, li) => {
+  return `<div class="layer" style="background:${layerColors[li]};border-color:${layerBorders[li]}">
+    <div class="layer-name" style="background:${layerBorders[li]};color:#fff">${layer.name}</div>
+    <div class="layer-items">${layer.items.map(item =>
+      `<div class="layer-item">
+        <div class="item-id">${item.id}</div>
+        <div class="item-label">${item.label}</div>
+        <div class="item-desc">${item.desc}</div>
+        ${item.evidence ? `<div class="item-evidence">${item.evidence}</div>` : ''}
+        ${item.color ? `<div style="margin-top:.3rem;width:100%;height:3px;background:${item.color};border-radius:2px"></div>` : ''}
+      </div>`
+    ).join('')}</div>
+  </div>${li < D.leverage_system.layers.length-1 ? '<div class="arrow-down">▼</div>' : ''}`;
+}).join('');
+
+// Origins
+const origDiv = document.getElementById('origins');
+const qColors = {I:'#4CAF50',II:'#2196F3',III:'#F44336',IV:'#FF9800'};
+origDiv.innerHTML = D.origins.sort((a,b) => b.q2_count - a.q2_count).map(o => {
+  const s = o.scores;
+  return `<div class="origin" style="border-color:${qColors[o.quadrant]}">
+    <div class="o-name">${o.name} (${o.year}年)</div>
+    <div class="o-meta">象限${o.quadrant} → II（${o.q2_count}件の子孫） | domain=${o.domain} | path=${o.path}</div>
+    <div class="o-scores">
+      <span style="background:#E3F2FD">美的=${s.a}</span>
+      <span style="background:#FCE4EC">感情=${s.e}</span>
+      <span style="background:#FFF3E0">意味=${s.m}</span>
+      <span style="background:#E8F5E9">関係=${s.r}</span>
+      <span style="background:#F3E5F5">自律=${s.au}</span>
+      <span style="background:#EFEBE9">文化=${s.c}</span>
+      <span style="background:#ECEFF1">経済=${s.econ}</span>
+    </div>
+    <div class="o-desc">→ ${o.descendants.join(' / ')}</div>
+  </div>`;
+}).join('');
+
+// Profiles
+const profDiv = document.getElementById('profiles');
+const maxProf = Math.max(...D.profiles.map(p => p.count));
+profDiv.innerHTML = '<h3>上位12の6次元支配パターン</h3>' + D.profiles.map(p => {
+  const color = p.avg_qol > 2.5 ? '#1565C0' : p.avg_qol > 2 ? '#42A5F5' : '#90CAF9';
+  return `<div class="profile-row">
+    <div class="profile-label">${p.pattern}</div>
+    <div class="profile-bar"><div class="profile-fill" style="width:${100*p.count/maxProf}%;background:${color}"></div></div>
+    <div class="profile-val">${p.count.toLocaleString()} (QoL=${p.avg_qol})</div>
+  </div>`;
+}).join('');
+
+// Triggers
+const trigDiv = document.getElementById('triggers');
+const maxTrig = Math.max(...D.triggers.map(t => t.count));
+const trigColors = {'文化的動機':'#9C27B0','技術転換':'#2196F3','市場の力':'#4CAF50','規制政策':'#FF9800',
+  '都市変容':'#795548','環境危機':'#009688','安全危機':'#F44336','社会運動':'#E91E63',
+  '自由渇望':'#3F51B5','美的追求':'#FF5722','経済危機':'#607D8B','複合/不明':'#9E9E9E'};
+trigDiv.innerHTML = '<h3>象限IIのトリガーカテゴリ</h3>' + D.triggers.map(t => {
+  const color = trigColors[t.cat] || '#999';
+  return `<div class="trigger-row">
+    <div class="trigger-label">${t.cat}</div>
+    <div class="trigger-bar"><div class="trigger-fill" style="width:${100*t.count/maxTrig}%;background:${color}"></div></div>
+    <div class="trigger-val">${t.pct}%</div>
+  </div>`;
+}).join('');
+
+// Combos
+const comboDiv = document.getElementById('combos');
+const maxComboQol = Math.max(...D.combos.map(c => c.avg_qol));
+comboDiv.innerHTML = '<h3>高QoLドメイン×トリガー組み合わせ（上位25）</h3>' + D.combos.map(c => {
+  const w = 100 * c.avg_qol / maxComboQol;
+  const color = c.avg_qol > 3 ? '#C62828' : c.avg_qol > 2.5 ? '#E65100' : '#FF9800';
+  return `<div class="combo-item">
+    <div class="combo-label">${c.combo}</div>
+    <div class="combo-bar"><div class="combo-fill" style="width:${w}%;background:${color}"></div></div>
+    <div class="combo-val">${c.avg_qol}</div>
+    <div class="combo-ex">${c.example}</div>
+  </div>`;
+}).join('');
+
+// Activation order
+const actDiv = document.getElementById('activation');
+const actColors = ['#C62828','#D32F2F','#E65100','#F57C00','#FFA726','#FFB74D'];
+const roleColors = {'主軸':'#C62828','補助':'#E65100','最終':'#FFA726'};
+actDiv.innerHTML = '<h3>QoL次元の活性化順序</h3>' + D.dim_activation.map((d, i) => {
+  return `<div class="act-row">
+    <div class="act-order" style="background:${actColors[i]}">${i+1}</div>
+    <div class="act-info">
+      <span class="act-name">${d.dim}</span>
+      <span class="act-score">${d.score.toFixed(3)}</span>
+      <span class="act-role" style="background:${roleColors[d.role]}20;color:${roleColors[d.role]}">${d.role}</span>
+    </div>
+  </div>`;
+}).join('');
+</script>
+</body>
+</html>

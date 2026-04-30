@@ -207,6 +207,8 @@ def main():
         ('/tmp/auto_daily.txt', 'Automobile'),
         ('/tmp/auto_safety_ev.txt', 'Automobile'),
         ('/tmp/auto_racing_events.txt', 'Automobile'),
+        ('/tmp/electricity_final_80.txt', 'Electricity'),
+        ('/tmp/auto_final_300.txt', 'Automobile'),
     ]
 
     # Also try to extract pipe data from electricity agent output

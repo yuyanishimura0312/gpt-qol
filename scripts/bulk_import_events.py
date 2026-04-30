@@ -228,6 +228,7 @@ def main():
         ('/tmp/auto_10k_b_part1.txt', 'Automobile'),
         ('/tmp/auto_10k_f.txt', 'Automobile'),
         ('/tmp/auto_10k_g.txt', 'Automobile'),
+        ('/tmp/auto_10k_f.txt', 'Automobile'),
     ]
 
     # Also try to extract pipe data from electricity agent output

@@ -200,7 +200,37 @@ def main():
         ('/tmp/printing_press_qol_events.txt', 'Printing Press'),
         ('/tmp/steam_engine_events.txt', 'Steam Engine'),
         ('/tmp/automobile_events_final.txt', 'Automobile'),
+        # Electricity agent output (inline pipe data)
+        ('/tmp/electricity_events.txt', 'Electricity'),
+        ('/tmp/telephone_events.txt', 'Telephone'),
+        ('/tmp/auto_global.txt', 'Automobile'),
+        ('/tmp/auto_daily.txt', 'Automobile'),
+        ('/tmp/auto_safety_ev.txt', 'Automobile'),
+        ('/tmp/auto_racing_events.txt', 'Automobile'),
     ]
+
+    # Also try to extract pipe data from electricity agent output
+    elec_output = '/private/tmp/claude-502/-Users-nishimura-/ea9d1e4e-0230-40fc-89a2-328b16fe582d/tasks/a7c4c1dc9c9e8c4cf.output'
+    if os.path.exists(elec_output) and not os.path.exists('/tmp/electricity_events.txt'):
+        import json
+        extracted = []
+        with open(elec_output) as f:
+            for line in f:
+                try:
+                    obj = json.loads(line)
+                    if obj.get('type') == 'assistant':
+                        for c in obj.get('message', {}).get('content', []):
+                            if c.get('type') == 'text':
+                                for tl in c['text'].split('\n'):
+                                    tl = tl.strip()
+                                    if '|' in tl and len(tl.split('|')) >= 15:
+                                        extracted.append(tl)
+                except:
+                    pass
+        if extracted:
+            with open('/tmp/electricity_events.txt', 'w') as f:
+                f.write('\n'.join(extracted))
+            print(f"Extracted {len(extracted)} electricity event lines from agent output")
 
     total = 0
     for filepath, gpt in files:

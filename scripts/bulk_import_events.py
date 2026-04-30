@@ -221,6 +221,10 @@ def main():
         # Round 4: Auto 10K
         ('/tmp/auto_10k_a.txt', 'Automobile'),
         ('/tmp/auto_10k_b.txt', 'Automobile'),
+        ('/tmp/auto_10k_c.txt', 'Automobile'),
+        ('/tmp/auto_10k_d.txt', 'Automobile'),
+        ('/tmp/auto_10k_e.txt', 'Automobile'),
+        ('/tmp/steam_final.txt', 'Steam Engine'),
     ]
 
     # Also try to extract pipe data from electricity agent output

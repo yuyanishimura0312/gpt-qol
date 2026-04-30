@@ -1,0 +1,180 @@
+{
+  "robotics_current": {
+    "total_mentions": 72,
+    "total_sources": 96,
+    "domains_covered": 23
+  },
+  "mechanisms": [
+    {
+      "name": "目的地化 (Destination Shift)",
+      "auto_pattern": "移動手段→景観体験の目的化（ロードトリップ、シーニックドライブ）",
+      "robot_projection": "タスク実行手段→「ロボットとの対話」や「共創体験」自体が目的化",
+      "candidates": [
+        "ロボットダンス共創 — パフォーマンス自体が美的体験に",
+        "ロボットとの会話 — 効率的情報伝達→対話の楽しさ・安心感",
+        "ロボット介護 — 身体介助→ロボットとの日常の共有",
+        "ロボット教育 — 学習ツール→ロボットとの探究的遊び"
+      ],
+      "qol_dims": [
+        "aesthetic",
+        "emotional"
+      ],
+      "timeline": "2025-2035",
+      "leverage": "初期は経済的目的(効率化)で導入し、ユーザーが「プロセス自体」に価値を見出す転換点"
+    },
+    {
+      "name": "シンボル化 (Symbol Formation)",
+      "auto_pattern": "効率ツール→個人の自由・自律のシンボル（パーソナルフリーダム）",
+      "robot_projection": "支援ツール→「自律性」や「尊厳」のシンボル",
+      "candidates": [
+        "外骨格スーツ — 障害者の「歩ける自分」というアイデンティティ回復",
+        "OriHime — 重度障害者の「社会参加」のシンボル",
+        "コンパニオンロボット — 高齢者の「孤独でない自分」の象徴",
+        "ロボット義肢 — 「サイボーグ」としての新アイデンティティ"
+      ],
+      "qol_dims": [
+        "autonomy",
+        "meaning"
+      ],
+      "timeline": "2025-2030",
+      "leverage": "技術的支援→当事者のアイデンティティ形成→文化的シンボルへの昇華"
+    },
+    {
+      "name": "コミュニティ化 (Community Formation)",
+      "auto_pattern": "個人の車→愛好家コミュニティ・カーカルチャー形成",
+      "robot_projection": "個人のロボット→ロボット愛好家コミュニティ・ロボットカルチャー形成",
+      "candidates": [
+        "ロボット競技会 — RoboCup、FIRST、ロボット相撲のコミュニティ",
+        "ロボットカフェ — OriHimeカフェ→障害者と健常者の交流の場",
+        "ロボット修理・DIY文化 — オープンソースロボットのメイカーコミュニティ",
+        "ロボットペットオーナーズクラブ — LOVOT、aibo愛好家の集い"
+      ],
+      "qol_dims": [
+        "relational",
+        "meaning"
+      ],
+      "timeline": "2025-2035",
+      "leverage": "個人利用→共有体験→コミュニティ形成→アイデンティティの場"
+    },
+    {
+      "name": "遺産化 (Heritage Crystallization)",
+      "auto_pattern": "産業拠点の衰退→ノスタルジア・文化遺産・博物館",
+      "robot_projection": "初期産業用ロボット→「ロボット遺産」としての文化的価値",
+      "candidates": [
+        "初代AIBOの復刻・コレクション文化",
+        "FANUC黄色ロボットの産業遺産化",
+        "ASIMO引退→ヒューマノイド開発史のシンボル",
+        "初期手術ロボット→医療技術遺産"
+      ],
+      "qol_dims": [
+        "cultural",
+        "meaning"
+      ],
+      "timeline": "2030-2045",
+      "leverage": "現役→引退→ノスタルジア→文化的アイデンティティ（自動車より短周期で発生予測）"
+    },
+    {
+      "name": "抵抗からの創造 (Resistance → Creation)",
+      "auto_pattern": "公害・孤立→カーフリー運動→新たなQoL回復",
+      "robot_projection": "ロボットによる雇用喪失・依存→抵抗運動→「人間的価値」の再発見",
+      "candidates": [
+        "「人間にしかできない」価値の再定義運動",
+        "ロボットフリーゾーン — 手作り・対面・アナログの価値回復",
+        "ロボット倫理運動 — ケア労働の人間性をめぐる議論",
+        "スローロボティクス — 効率ではなく「丁寧さ」を重視するロボット利用"
+      ],
+      "qol_dims": [
+        "meaning",
+        "cultural"
+      ],
+      "timeline": "2030-2040",
+      "leverage": "技術の負の側面の顕在化→市民の抵抗→「人間的なもの」の再定義"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "name": "「対話的ケア」仮説",
+      "statement": "ロボットケアは「タスク効率化」から「対話と共存の体験」自体が目的化する",
+      "mechanism": "目的地化",
+      "auto_precedent": "自動車: 移動手段→ロードトリップ体験（1930年代）",
+      "robot_evidence": "PARO、LOVOT、OriHime — 効率性ではなく関係性が主効果",
+      "timeline": "2025-2032",
+      "conditions": "長期間の接触、人間側の受容性、文化的ロボット観（日本のアニミズム）",
+      "qol_primary": "emotional + relational",
+      "confidence": "HIGH — 複数RCTで関係性効果を確認済み"
+    },
+    {
+      "id": "H2",
+      "name": "「自律回復のシンボル」仮説",
+      "statement": "外骨格・ロボット義肢は「機能回復」から「自律的アイデンティティ」のシンボルに昇華する",
+      "mechanism": "シンボル化",
+      "auto_precedent": "自動車: 輸送手段→個人的自由のシンボル（1920年代）",
+      "robot_evidence": "軟体外骨格96.2%精度、OriHime障害者雇用",
+      "timeline": "2025-2030",
+      "conditions": "当事者主導のナラティブ、メディア可視化、パラリンピック効果",
+      "qol_primary": "autonomy + meaning",
+      "confidence": "HIGH — 技術的成熟度が高く、当事者コミュニティが活発"
+    },
+    {
+      "id": "H3",
+      "name": "「ロボット共創文化」仮説",
+      "statement": "ロボットとの芸術的共創（ダンス、音楽、美術）が独自のアートジャンルとして確立する",
+      "mechanism": "目的地化 + コミュニティ化",
+      "auto_precedent": "自動車: 輸送手段→カーデザイン芸術（ピニンファリーナ、1950年代）",
+      "robot_evidence": "ロボットダンス研究、Shimonロボット音楽家、人間-ロボット即興",
+      "timeline": "2028-2038",
+      "conditions": "アーティストのロボット受容、展覧会・フェスティバルの場、批評言語の成立",
+      "qol_primary": "aesthetic + cultural",
+      "confidence": "MEDIUM — 技術的可能性は示されたが文化的受容は未確立"
+    },
+    {
+      "id": "H4",
+      "name": "「ロボット愛好家エコシステム」仮説",
+      "statement": "ロボットオーナーのコミュニティが、カーカルチャーと同様の愛好家文化を形成する",
+      "mechanism": "コミュニティ化",
+      "auto_precedent": "自動車: 個人所有→クラシックカークラブ、チューニング文化",
+      "robot_evidence": "AIBO愛好家、LOVOT飼い主コミュニティ、RoboCup参加者",
+      "timeline": "2027-2035",
+      "conditions": "手頃な価格のパーソナルロボット、カスタマイズ可能性、オンラインコミュニティ基盤",
+      "qol_primary": "relational + meaning",
+      "confidence": "MEDIUM — 初期兆候あり（AIBO、LOVOT）だがスケール未達"
+    },
+    {
+      "id": "H5",
+      "name": "「スローロボティクス」仮説",
+      "statement": "ロボットの効率化への抵抗から、「丁寧さ」「手作り」「対面」の価値を再発見する運動が生まれる",
+      "mechanism": "抵抗からの創造",
+      "auto_precedent": "自動車: 公害・孤立→カーフリー運動（1991年〜）",
+      "robot_evidence": "ロボット倫理議論（カント倫理、依存性リスク）、介護の人間性論争",
+      "timeline": "2030-2040",
+      "conditions": "ロボット普及率が臨界点に達すること、雇用喪失の可視化、文化的反動",
+      "qol_primary": "meaning + cultural",
+      "confidence": "MEDIUM — 自動車の40年遅れパターンから推測。まだ前兆段階"
+    },
+    {
+      "id": "H6",
+      "name": "「感覚拡張体験」仮説",
+      "statement": "ハプティクス・触覚技術が「情報伝達」から「新しい感覚体験のカテゴリ」を創出する",
+      "mechanism": "目的地化",
+      "auto_precedent": "蓄音機: ビジネス辞書→音楽鑑賞。電気: 実用照明→ネオン夜景美学",
+      "robot_evidence": "S-CATアフェクティブタッチロボット、ハプティックリング、触覚代行",
+      "timeline": "2028-2038",
+      "conditions": "触覚技術の小型化、ウェアラブル化、美的体験としてのフレーミング",
+      "qol_primary": "aesthetic + emotional",
+      "confidence": "LOW-MEDIUM — 技術はEMERGINGだが「美的体験」への転換は未確認"
+    },
+    {
+      "id": "H7",
+      "name": "「文化的ロボット観の輸出」仮説",
+      "statement": "日本のアニミズム的ロボット観が、西洋の「脅威論」を超える受容モデルとして世界に広がる",
+      "mechanism": "シンボル化 + コミュニティ化",
+      "auto_precedent": "自動車: 日本の軽自動車文化→グローバルシティカー概念への影響",
+      "robot_evidence": "ロボット僧侶Mindar、付喪神概念、OriHimeカフェの国際的注目",
+      "timeline": "2025-2040",
+      "conditions": "日本のロボット実践の国際的可視化、文化人類学的研究、非西洋倫理フレームワーク",
+      "qol_primary": "cultural + meaning",
+      "confidence": "MEDIUM — 学術的注目は高まっているが制度化は進んでいない"
+    }
+  ]
+}
